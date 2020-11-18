@@ -24,13 +24,12 @@ ENV NODE_PATH /var/www/
 WORKDIR /var/www/app/
 
 # Install ffmpeg so that it mirrors the way it would run in a lambda layer
-RUN mkdir /workdir && \
-  cd /workdir && \
-  curl -O https://johnvansickle.com/ffmpeg/builds/ffmpeg-git-amd64-static.tar.xz
+COPY bin/ffmpeg /opt/bin/ffmpeg
+COPY bin/lame /opt/bin/lame
+COPY bin/sox /opt/bin/sox
 
-RUN cd /workdir && \
-  tar xfa ffmpeg-git-amd64-static.tar.xz && \
-  rm ffmpeg-git-amd64-static.tar.xz && \
-  mv ffmpeg-git-*-amd64-static /opt/ffmpeg
+ENV FFMPEG_BIN_PATH /opt/ffmpeg
+ENV LAME_BIN_PATH /opt/lame
+ENV SOX_BIN_PATH /opt/sox
 
 CMD ['yarn', 'start']
